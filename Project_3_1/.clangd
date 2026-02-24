@@ -1,0 +1,6 @@
+CompileFlags:
+  Compiler: /usr/bin/arm-none-eabi-gcc
+  Add: [--target=arm-none-eabi]
+
+Diagnostics:
+  UnusedIncludes: None
