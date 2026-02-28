@@ -1,24 +1,28 @@
-#include <stdint.h>
 #include <sys/stat.h>
+#include <stdlib.h>
 #include <errno.h>
-extern uint32_t __HeapLimit;
-extern uint32_t _estack;
+#include <stdio.h>
+
+void _exit(int status) { (void)status; while (1) {} }
+
 caddr_t _sbrk(int incr) {
-    static uint32_t heap_ptr = 0;
-    uint32_t prev_heap_ptr;
-    if (heap_ptr == 0) heap_ptr = (uint32_t)&__HeapLimit;
-    prev_heap_ptr = heap_ptr;
-    if (heap_ptr + incr > (uint32_t)&_estack) {
-        errno = ENOMEM;
-        return (caddr_t)-1;
+    extern char _end;  /* 使用 _end 符号 */
+    static char *heap_end;
+    char *prev_heap_end;
+
+    if (heap_end == 0) {
+        heap_end = &_end;
     }
-    heap_ptr += incr;
-    return (caddr_t)prev_heap_ptr;
+    prev_heap_end = heap_end;
+    heap_end += incr;
+    return (caddr_t)prev_heap_end;
 }
+
 int _close(int file) { return -1; }
 int _fstat(int file, struct stat *st) { st->st_mode = S_IFCHR; return 0; }
 int _isatty(int file) { return 1; }
 int _lseek(int file, int ptr, int dir) { return 0; }
 int _read(int file, char *ptr, int len) { return 0; }
 int _write(int file, char *ptr, int len) { return len; }
-void _exit(int status) { while(1); }
+void _kill(int pid, int sig) { return; }
+int _getpid(void) { return -1; }
