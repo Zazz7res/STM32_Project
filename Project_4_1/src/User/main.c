@@ -5,7 +5,7 @@
 int main(void)
 {
 	/*模块初始化*/
-	OLED_Init();		//OLED初始化
+			//OLED初始化
 // ✅ 2. 防砖代码 (添加在这里)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
     GPIO_InitTypeDef GPIO_InitStruct;
@@ -15,7 +15,7 @@ int main(void)
     GPIO_Init(GPIOA, &GPIO_InitStruct);
     GPIO_ResetBits(GPIOA, GPIO_Pin_11 | GPIO_Pin_12);  // 拉低
     Delay_ms(10);  // 稳定电平
-
+        OLED_Init();
 	/*OLED显示*/
 	OLED_ShowChar(1, 1, 'A');				//1行1列显示字符A
 	
